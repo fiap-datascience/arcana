@@ -38,8 +38,9 @@ def main():
 
         caminho = f'dados/raw/{arquivo}'
         upload_to_s3(caminho)
-    
-    print("Todos os arquivos foram enviados para o S3 com sucesso!")
+
+
+    print("✅ Todos os arquivos foram enviados para o S3 com sucesso!")
 
 if __name__ == '__main__':
     main()

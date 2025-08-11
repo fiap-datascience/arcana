@@ -20,7 +20,7 @@ O Arcana é um projeto focado em análise e clusterização de clientes da TOTVS
 ## Roadmap
 
 - [x] Coleta e preparação dos dados
-- [x] Análise exploratória dos dados (EDA)
+- [ ] Análise exploratória dos dados (EDA)
 - [ ] Desenvolvimento dos modelos de clusterização
 - [ ] Validação e ajuste dos modelos
 - [ ] Criação de dashboards interativos para visualização dos clusters
