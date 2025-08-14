@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from io import BytesIO, StringIO
 import warnings
-import unidecode
 import os
 from dotenv import load_dotenv
 

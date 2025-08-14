@@ -17,7 +17,7 @@ RENOMEACAO_COLUNAS = {
     "nps_transacional_onboarding.csv": {
         "Data de resposta": "DATA_RESPOSTA",
         "Cod Cliente": "COD_CLIENTE",
-        "Em uma escala de 0 a 10, quanto você recomenda o Onboarding da TOTVS para um amigo ou colega?": "NOTA_RECOMENDACAO",
+        "Em uma escala de 0 a 10, quanto você recomenda o Onboarding da TOTVS para um amigo ou colega?.": "NOTA_RECOMENDACAO",
         "Em uma escala de 0 a 10, o quanto você acredita que o atendimento CS Onboarding ajudou no início da sua trajetória com a TOTVS?": "NOTA_ATENDIMENTO_CS_ONBOARDING",
         "- Duração do tempo na realização da reunião de Onboarding;": "NOTA_DURACAO_REUNIAO_ONBOARDING",
         "- Clareza no acesso aos canais de comunicação da TOTVS;": "NOTA_CLAREZA_CANAIS_COMUNICACAO",
@@ -31,7 +31,7 @@ RENOMEACAO_COLUNAS = {
     "historico.csv": {
         "NR_PROPOSTA": "NR_PROPOSTA",
         "DT_UPLOAD": "DATA_UPLOAD",
-        "CD_CLIENTE": "COD_CLIENTE",
+        "CD_CLI": "COD_CLIENTE",
         "CD_PROD": "COD_PROD"
     },
     "nps_transacional_implantacao.csv": {
@@ -50,6 +50,7 @@ RENOMEACAO_COLUNAS = {
         "resposta_NPS": "NOTA_NPS",
         "grupo_NPS": "GRUPO_NPS",
         "Nota_ConhecimentoAgente": "NOTA_CONHECIMENTO_AGENTE",
+        "Nota_Solucao": "NOTA_SOLUCAO",
         "Nota_TempoRetorno": "NOTA_TEMPO_RETORNO",
         "Nota_Facilidade": "NOTA_FACILIDADE",
         "Nota_Satisfacao": "NOTA_SATISFACAO",
@@ -233,96 +234,96 @@ RENOMEACAO_COLUNAS = {
 
 CAMPOS_TABELAS = {
     "nps_transacional_aquisicao.csv": {
-        "date_columns": ["DATA_RESPOSTA"],
-        "numeric_columns": ["NOTA_NPS", "NOTA_AGILIDADE", "NOTA_CONHECIMENTO", "NOTA_CUSTO", "NOTA_FACILIDADE", "NOTA_FLEXIBILIDADE"]
+        "colunas_data": ["DATA_RESPOSTA"],
+        "colunas_numericas": ["NOTA_NPS", "NOTA_AGILIDADE", "NOTA_CONHECIMENTO", "NOTA_CUSTO", "NOTA_FACILIDADE", "NOTA_FLEXIBILIDADE"]
     },
     "clientes_desde.csv": {
-        "date_columns": ["DATA_CLIENTE_DESDE"],
-        "numeric_columns": []
+        "colunas_data": ["DATA_CLIENTE_DESDE"],
+        "colunas_numericas": []
     },
     "dados_clientes.csv": {
-        "date_columns": ["DATA_ASSINATURA_CONTRATO"],
-        "numeric_columns": []
+        "colunas_data": ["DATA_ASSINATURA_CONTRATO"],
+        "colunas_numericas": []
     },
     "contratacoes_ultimos_12_meses.csv": {
-        "date_columns": [],
-        "numeric_columns": ["QT_CONTRATACOES_12M", "VL_CONTRATACOES_12M"]
+        "colunas_data": [],
+        "colunas_numericas": ["QT_CONTRATACOES_12M", "VL_CONTRATACOES_12M"]
     },
     "nps_transacional_onboarding.csv": {
-        "date_columns": ["DATA_RESPOSTA"],
-        "numeric_columns": ["NOTA_RECOMENDACAO", "NOTA_ATENDIMENTO_CS_ONBOARDING","NOTA_DURACAO_REUNIAO_ONBOARDING","NOTA_CLAREZA_CANAIS_COMUNICACAO", "NOTA_CLAREZA_INFORMACOES_CS", "NOTA_EXPECTATIVAS_ATENDIDAS_ONBOARDING"]
+        "colunas_data": ["DATA_RESPOSTA"],
+        "colunas_numericas": ["NOTA_RECOMENDACAO", "NOTA_ATENDIMENTO_CS_ONBOARDING","NOTA_DURACAO_REUNIAO_ONBOARDING","NOTA_CLAREZA_CANAIS_COMUNICACAO", "NOTA_CLAREZA_INFORMACOES_CS", "NOTA_EXPECTATIVAS_ATENDIDAS_ONBOARDING"]
     },
     "historico.csv": {
-        "date_columns": ["DATA_UPLOAD"],
-        "numeric_columns": []
+        "colunas_data": ["DATA_UPLOAD"],
+        "colunas_numericas": []
     },
     "nps_transacional_implantacao.csv": {
-        "date_columns": ["DATA_RESPOSTA"],
-        "numeric_columns": ["NOTA_NPS", "NOTA_METODOLOGIA", "NOTA_GESTAO", "NOTA_CONHECIMENTO", "NOTA_QUALIDADE", "NOTA_COMUNICACAO", "NOTA_PRAZOS"]
+        "colunas_data": ["DATA_RESPOSTA"],
+        "colunas_numericas": ["NOTA_NPS", "NOTA_METODOLOGIA", "NOTA_GESTAO", "NOTA_CONHECIMENTO", "NOTA_QUALIDADE", "NOTA_COMUNICACAO", "NOTA_PRAZOS"]
     },
     "nps_transacional_suporte.csv": {
-        "date_columns": [],
-        "numeric_columns": ["NOTA_NPS", "NOTA_CONHECIMENTO_AGENTE", "NOTA_TEMPO_RETORNO", "NOTA_FACILIDADE", "NOTA_QUALIDADE", "NOTA_SATISFACAO"]
+        "colunas_data": [],
+        "colunas_numericas": ["NOTA_NPS", "NOTA_CONHECIMENTO_AGENTE", "NOTA_TEMPO_RETORNO", "NOTA_FACILIDADE", "NOTA_QUALIDADE", "NOTA_SATISFACAO"]
     },
     "mrr.csv": {
-        "date_columns": [],
-        "numeric_columns": ["MRR_12M"]
+        "colunas_data": [],
+        "colunas_numericas": ["MRR_12M"]
     },
     "nps_relacional.csv": {
-        "date_columns": ["DATA_RESPOSTA"],
-        "numeric_columns": ["NOTA_NPS", "NOTA_RESPOSTA_UNIDADE", "NOTA_SUPTEC_AGILIDADE", "NOTA_SUPTEC_ATENDIMENTO", "NOTA_COMERCIAL", "NOTA_CUSTOS", "NOTA_ADMFIN_ATENDIMENTO", "NOTA_SOFTWARE", "NOTA_SOFTWARE_ATUALIZACAO"]
+        "colunas_data": ["DATA_RESPOSTA"],
+        "colunas_numericas": ["NOTA_NPS", "NOTA_RESPOSTA_UNIDADE", "NOTA_SUPTEC_AGILIDADE", "NOTA_SUPTEC_ATENDIMENTO", "NOTA_COMERCIAL", "NOTA_CUSTOS", "NOTA_ADMFIN_ATENDIMENTO", "NOTA_SOFTWARE", "NOTA_SOFTWARE_ATUALIZACAO"]
     },
     "tickets.csv": {
-        "date_columns": ["DATA_CRIACAO", "DATA_ATUALIZACAO"],
-        "numeric_columns": []
+        "colunas_data": ["DATA_CRIACAO", "DATA_ATUALIZACAO"],
+        "colunas_numericas": []
     },
     "nps_transacional_produto.csv": {
-        "date_columns": ["DATA_RESPOSTA"],
-        "numeric_columns": ["NOTA_NPS"]
+        "colunas_data": ["DATA_RESPOSTA"],
+        "colunas_numericas": ["NOTA_NPS"]
     },
     "telemetria_1.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_2.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_3.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_4.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_5.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_6.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_7.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_8.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_9.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_10.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     },
     "telemetria_11.csv": {
-        "date_columns": ["DATA_REFERENCIA"],
-        "numeric_columns": ["DURACAO_EVENTO"]
+        "colunas_data": ["DATA_REFERENCIA"],
+        "colunas_numericas": ["DURACAO_EVENTO"]
     }
 }
 
@@ -344,49 +345,40 @@ def lista_arquivos_csv(bucket, prefix):
             files.append(obj["Key"])
     return files
 
-def valida_datas(df, date_columns):
+def valida_datas(df, colunas_data):
     """Valida colunas de data."""
-    for col in date_columns:
+    for col in colunas_data:
         if col in df.columns:
-            converted = pd.to_datetime(df[col], errors="coerce")
-            invalid_count = converted.isna().sum()
-            if invalid_count > 0:
-                print(f"⚠️ Coluna '{col}' contém {invalid_count} valores inválidos para data.")
-            df[col] = converted
+            converte = pd.to_datetime(df[col], errors="coerce")
+            valores_invalidos = converte.isna().sum()
+            if valores_invalidos > 0:
+                print(f"Coluna '{col}' contém {valores_invalidos} valores inválidos para data.")
+            df[col] = converte
     return df
 
-def valida_numericos(df, numeric_columns):
+def valida_numericos(df, colunas_numericas):
     """Valida colunas numéricas."""
-    for col in numeric_columns:
+    for col in colunas_numericas:
         if col in df.columns:
-            converted = pd.to_numeric(df[col], errors="coerce")
-            invalid_count = converted.isna().sum()
-            if invalid_count > 0:
-                print(f"⚠️ Coluna '{col}' contém {invalid_count} valores inválidos para número.")
-            df[col] = converted
+            converte = pd.to_numeric(df[col], errors="coerce")
+            valores_invalidos = converte.isna().sum()
+            if valores_invalidos > 0:
+                print(f"Coluna '{col}' contém {valores_invalidos} valores inválidos para número.")
+            df[col] = converte
     return df
 
-def detectar_separador_amostra(bytes_data):
-    sample = bytes_data.decode("utf-8", errors="ignore")
-    sniffer = csv.Sniffer()
-    try:
-        dialect = sniffer.sniff(sample.split("\n", 5)[0])  # testa na primeira linha
-        return dialect.delimiter
-    except csv.Error:
-        return ","  # fallback padrão
-
-def decode_bytes_with_fallback(raw_bytes):
+def decodificador_arquivo(arquivo):
     for enc in ("utf-8-sig", "utf-8", "cp1252", "latin-1"):
         try:
-            return raw_bytes.decode(enc), enc
+            return arquivo.decode(enc), enc
         except UnicodeDecodeError:
             continue
-    return raw_bytes.decode("latin-1", errors="replace"), "latin-1"
+    return arquivo.decode("latin-1", errors="replace"), "latin-1"
 
-def detecta_separador(text):
-    sample = text[:4096]
+def detecta_separador(texto):
+    amostra = texto[:4096]
     try:
-        dialect = csv.Sniffer().sniff(sample, delimiters=[",", ";", "\t", "|"])
+        dialect = csv.Sniffer().sniff(amostra, delimiters=[",", ";", "\t", "|"])
         return dialect.delimiter
     except csv.Error:
         return None
@@ -395,14 +387,14 @@ def detecta_separador(text):
 def processa_csv_para_parquet(s3_key):
     """Processa CSV: detecta encoding/sep, renomeia, valida e salva no curated."""
     filename = s3_key.split("/")[-1]
-    print(f"\n Processando {filename}...")
+    print(f"\nProcessando {filename}...")
 
     # Baixar bytes do S3
     obj = s3.get_object(Bucket=BUCKET, Key=s3_key)
-    raw_bytes = obj["Body"].read()
+    arquivo = obj["Body"].read()
 
     # Detectar encoding e decodificar
-    text, enc = decode_bytes_with_fallback(raw_bytes)
+    text, enc = decodificador_arquivo(arquivo)
     print(f"Encoding detectado: {enc}")
 
     # Detectar separador
@@ -416,7 +408,7 @@ def processa_csv_para_parquet(s3_key):
         else:
             df = pd.read_csv(StringIO(text), sep=None, engine="python")
     except Exception as e1:
-        print(f"   ⚠️ Falha na leitura ({type(e1).__name__}). Nova tentativa com engine='python'.")
+        print(f"Falha na leitura ({type(e1).__name__}).")
         df = pd.read_csv(StringIO(text), sep=sep or None, engine="python", on_bad_lines="error")
 
     # Renomear colunas 
@@ -425,21 +417,20 @@ def processa_csv_para_parquet(s3_key):
         df.rename(columns=rename_map, inplace=True)
 
     # Limpeza inicial
-    # df.dropna(how="all", inplace=True)
-    # df.drop_duplicates(inplace=True)
+    df.dropna(how="all", inplace=True)
+    df.drop_duplicates(inplace=True)
 
     # Validar datas e numéricos conforme regras por tabela
     rules = CAMPOS_TABELAS.get(filename, {})
-    df = valida_datas(df, rules.get("date_columns", []))
-    df = valida_numericos(df, rules.get("numeric_columns", []))
+    df = valida_datas(df, rules.get("colunas_data", []))
+    df = valida_numericos(df, rules.get("colunas_numericas", []))
 
     # Ajuste nos números com vírgula decimal
-    for col in rules.get("numeric_columns", []):
+    for col in rules.get("colunas_numericas", []):
         if col in df.columns and df[col].dtype == "object":
             df[col] = (df[col]
-                       .astype(str)
-                       .str.replace(".", "", regex=False)  # remove separador de milhar
-                       .str.replace(",", ".", regex=False))  # troca vírgula por ponto
+                    .astype(str)
+                    .str.replace(",", ".", regex=False))  # troca vírgula por ponto
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
     # Salvar no formato Parquet
@@ -450,14 +441,14 @@ def processa_csv_para_parquet(s3_key):
     curated_key = f"{PREFIXO_CURATED}{filename.replace('.csv', '.parquet')}"
     s3.put_object(Bucket=BUCKET, Key=curated_key, Body=parquet_buffer.getvalue())
 
-    print(f"✅ Arquivo salvo na camada curated: {curated_key}")
+    print(f"Arquivo salvo na camada curated: {curated_key}")
 
 def main():
     csv_files = lista_arquivos_csv(BUCKET, PREFIXO_RAW)
     for file_key in csv_files:
         processa_csv_para_parquet(file_key)
 
-    print(f"✅ Todos os arquivos foram processados.")
+    print(f"Todos os arquivos foram processados.")
 
 if __name__ == "__main__":
     main()
