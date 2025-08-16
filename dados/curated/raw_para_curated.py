@@ -26,7 +26,12 @@ RENOMEACAO_COLUNAS = {
     },
     "dados_clientes.csv": {
         "CD_CLIENTE": "COD_CLIENTE",
-        "DT_ASSINATURA_CONTRATO": "DATA_ASSINATURA_CONTRATO"
+        "DT_ASSINATURA_CONTRATO": "DATA_ASSINATURA_CONTRATO",
+        "CIDADE": "CIDADE_CLIENTE",
+        "UF": "UF_CLIENTE",
+        "PAIS": "PAIS_CLIENTE",
+        "SITUACAO_CONTRATO": "SIT_CONTRATO",
+        "PERIODICIDADE": "PERIODICIDADE_COBRANCA"
     },
     "historico.csv": {
         "NR_PROPOSTA": "NR_PROPOSTA",
@@ -360,7 +365,17 @@ def valida_numericos(df, colunas_numericas):
     """Valida colunas numéricas."""
     for col in colunas_numericas:
         if col in df.columns:
-            converte = pd.to_numeric(df[col], errors="coerce")
+            valores = df[col].astype(str).str.strip()
+
+            # Se houver vírgula em uma fração relevante das linhas, assumimos padrão BR
+            if (valores.str.contains(",", na=False).mean() > 0.05):
+                valores = valores.str.replace(".", "", regex=False)  # remove milhar
+                valores = valores.str.replace(",", ".", regex=False) # vírgula -> ponto
+
+            # remove símbolos não numéricos residuais (R$, espaços, etc.)
+            valores = valores.str.replace(r"[^\d\.\-]", "", regex=True)
+
+            converte = pd.to_numeric(valores, errors="coerce")
             valores_invalidos = converte.isna().sum()
             if valores_invalidos > 0:
                 print(f"Coluna '{col}' contém {valores_invalidos} valores inválidos para número.")
@@ -424,15 +439,7 @@ def processa_csv_para_parquet(s3_key):
     rules = CAMPOS_TABELAS.get(filename, {})
     df = valida_datas(df, rules.get("colunas_data", []))
     df = valida_numericos(df, rules.get("colunas_numericas", []))
-
-    # Ajuste nos números com vírgula decimal
-    for col in rules.get("colunas_numericas", []):
-        if col in df.columns and df[col].dtype == "object":
-            df[col] = (df[col]
-                    .astype(str)
-                    .str.replace(",", ".", regex=False))  # troca vírgula por ponto
-            df[col] = pd.to_numeric(df[col], errors="coerce")
-
+    
     # Salvar no formato Parquet
     parquet_buffer = BytesIO()
     df.to_parquet(parquet_buffer, index=False)
