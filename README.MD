@@ -31,9 +31,9 @@ O projeto contempla desde a ingestão e organização dos dados em camadas até 
 - [x] Análise exploratória inicial para entendimento dos dados.
 - [x] Criação da camada **silver** (dados tratados, padronizados e prontos para análise).  
 - [x] Análise exploratória completa.  
-- [ ] **Engenharia de atributos para clusterização (em andamento)** .  
-- [ ] Desenvolvimento e validação de modelos de clusterização.  
-- [ ] Construção de dashboards interativos para análise dos clusters.  
+- [x] Engenharia de atributos para clusterização.  
+- [ ] **Desenvolvimento e validação de modelos de clusterização (em andamento)**.  
+- [ ] **Construção de dashboards interativos para análise dos clusters(em andamento)** .  
 - [ ] Automatização do pipeline de ingestão e atualização periódica.  
 - [ ] Documentação final do projeto e publicação dos resultados.  
 
@@ -43,6 +43,13 @@ O projeto contempla desde a ingestão e organização dos dados em camadas até 
 Para a organização e definição das atividades de cada etapa, estamos utilizando um Kanban no Trello.
 
 Link para acesso ao Kanban: [Kanban](https://trello.com/invite/b/682fca65088d0a8826829116/ATTI3be9d02d2f1b29bb1b2e38895400c9d407137146/kanban-arcana-ec2025)
+
+
+## 📊 DataViz
+
+Para facilitar o acesso à informação e obter insights dos clusters de uma forma visual e interativa desenvolvemos um dashboard no Power BI.
+
+Link para acesso ao dashboard no Power BI: [Power BI](https://app.powerbi.com/links/24aVgxlpNy?ctid=58b0caf9-adf5-4414-a98e-423beb13dddd&pbi_source=linkShare)
 
 
 ## 🧑‍💻 Tecnologias
