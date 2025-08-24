@@ -11,12 +11,10 @@ from dotenv import load_dotenv
 load_dotenv()
 warnings.filterwarnings("ignore")
 
-
 # Configurações padrão
 BUCKET = os.getenv("AWS_S3_BUCKET_NAME", "arcana-fiap")
 REGIAO = os.getenv("AWS_REGION", os.getenv("AWS_DEFAULT_REGION", "us-east-2"))
 PREFIXO = "silver/"
-
 
 # Conexão S3
 def get_s3():
@@ -26,39 +24,6 @@ def get_s3():
         aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
         region_name=REGIAO,
     )
-
-
-# Leitura pontual
-def acessar_parquet_s3(
-    ARQUIVO: str,
-    bucket_name: Optional[str] = None,
-    key_prefix: str = "silver",
-    columns: Optional[Iterable[str]] = None,
-) -> Optional[pd.DataFrame]:
-    
-    bucket_name = bucket_name or BUCKET
-    s3 = get_s3()
-
-    key = f"{key_prefix.rstrip('/')}/{ARQUIVO}.parquet"
-    try:
-        obj = s3.get_object(Bucket=bucket_name, Key=key)
-        data = BytesIO(obj["Body"].read())
-        return pd.read_parquet(data, columns=list(columns) if columns else None, engine="pyarrow")
-
-    except s3.exceptions.NoSuchKey:
-        print(f"Arquivo não encontrado no S3: s3://{bucket_name}/{key}")
-        return None
-    except s3.exceptions.NoSuchBucket:
-        print(f"O bucket '{bucket_name}' não existe ou não está acessível.")
-        return None
-    except botocore.exceptions.ClientError as e:
-        code = e.response.get("Error", {}).get("Code", "Unknown")
-        print(f"Erro de cliente AWS ({code}) ao tentar acessar {key}.")
-        return None
-    except Exception as e:
-        print(f"Erro inesperado ao tentar acessar {key}: {str(e)}")
-        return None
-
 
 # Listagem
 def listar_parquets(bucket: str = BUCKET, prefix: str = PREFIXO) -> List[str]:
@@ -74,6 +39,14 @@ def listar_parquets(bucket: str = BUCKET, prefix: str = PREFIXO) -> List[str]:
                 keys.append(obj["Key"])
     return keys
 
+
+def _index_por_basename(bucket: str, prefix: str) -> dict[str, list[str]]:
+    keys = listar_parquets(bucket, prefix)
+    idx: dict[str, list[str]] = {}
+    for k in keys:
+        base_no_ext = os.path.splitext(os.path.basename(k))[0]
+        idx.setdefault(base_no_ext, []).append(k)
+    return idx
 
 # Utilitários de nome
 def _nome_variavel(basename: str, existentes: Iterable[str]) -> str:
@@ -95,12 +68,63 @@ def _nome_variavel(basename: str, existentes: Iterable[str]) -> str:
 def _match_pattern(basename: str, pattern: Optional[str]) -> bool:
     if not pattern:
         return True
-    # transforma glob simples em regex
     pat = re.escape(pattern).replace(r"\*", ".*")
     return re.fullmatch(pat, basename) is not None
 
+# Leitura pontual
+def acessar_parquet_s3(
+    ARQUIVO: str,
+    bucket_name: Optional[str] = None,
+    key_prefix: str = "silver",
+    columns: Optional[Iterable[str]] = None,
+) -> Optional[pd.DataFrame]:
+    """
+    Lê s3://bucket/silver/<ARQUIVO>.parquet (modo antigo) OU
+    resolve s3://bucket/silver/**/<ARQUIVO>.parquet (novo layout com subpastas).
+    Também aceita ARQUIVO com subpasta já informada (ex.: 'tb_dados_clientes/dados_clientes').
+    """
+    bucket_name = bucket_name or BUCKET
+    s3 = get_s3()
 
-# Carregamentos em lote
+    direct_key = f"{key_prefix.rstrip('/')}/{ARQUIVO}.parquet"
+    if ARQUIVO.lower().endswith(".parquet"):
+        direct_key = f"{key_prefix.rstrip('/')}/{ARQUIVO}"
+
+    try:
+        obj = s3.get_object(Bucket=bucket_name, Key=direct_key)
+        data = BytesIO(obj["Body"].read())
+        return pd.read_parquet(data, columns=list(columns) if columns else None, engine="pyarrow")
+
+    except s3.exceptions.NoSuchKey:
+        basename = ARQUIVO[:-8] if ARQUIVO.lower().endswith(".parquet") else ARQUIVO
+        idx = _index_por_basename(bucket_name, key_prefix)
+        candidatos = idx.get(basename, [])
+        if not candidatos:
+            print(f"Arquivo não encontrado (nem direto nem por busca): {ARQUIVO}")
+            return None
+        if len(candidatos) > 1:
+            print(f"Aviso: múltiplos arquivos encontrados para '{basename}':\n  - " + "\n  - ".join(candidatos))
+        key = candidatos[0]
+        try:
+            obj = s3.get_object(Bucket=bucket_name, Key=key)
+            data = BytesIO(obj["Body"].read())
+            return pd.read_parquet(data, columns=list(columns) if columns else None, engine="pyarrow")
+        except Exception as e:
+            print(f"Erro lendo {key}: {e}")
+            return None
+
+    except s3.exceptions.NoSuchBucket:
+        print(f"O bucket '{bucket_name}' não existe ou não está acessível.")
+        return None
+    except botocore.exceptions.ClientError as e:
+        code = e.response.get("Error", {}).get("Code", "Unknown")
+        print(f"Erro de cliente AWS ({code}) ao tentar acessar {direct_key}.")
+        return None
+    except Exception as e:
+        print(f"Erro inesperado ao tentar acessar {direct_key}: {str(e)}")
+        return None
+
+# Carregamentos em lote (injeta no escopo)
 def carregar_parquets_em_variaveis(
     bucket: str = BUCKET,
     prefix: str = PREFIXO,
@@ -116,7 +140,14 @@ def carregar_parquets_em_variaveis(
     if nomes is None:
         keys = listar_parquets(bucket, prefix)
     else:
-        keys = [f"{prefix.rstrip('/')}/{n}.parquet" for n in nomes]
+        idx = _index_por_basename(bucket, prefix)
+        keys = []
+        for n in nomes:
+            base = n[:-8] if n.lower().endswith(".parquet") else n
+            if base in idx:
+                keys.extend(idx[base])
+            else:
+                keys.append(f"{prefix.rstrip('/')}/{n}.parquet")
 
     if not keys:
         print("Nenhum parquet encontrado.")
@@ -126,7 +157,7 @@ def carregar_parquets_em_variaveis(
     existentes = set(destino.keys())
 
     for key in keys:
-        base = os.path.basename(key)  # ex.: telemetria_1.parquet
+        base = os.path.basename(key)
         base_no_ext = os.path.splitext(base)[0]
         if not _match_pattern(base_no_ext, pattern):
             continue
@@ -151,6 +182,7 @@ def carregar_parquets_em_variaveis(
         print("Nenhum arquivo carregado (verifique 'nomes' e/ou 'pattern').")
     return criados
 
+# Carregamentos em lote (retorna dict)
 def carregar_parquets(
     bucket: str = BUCKET,
     prefix: str = PREFIXO,
@@ -159,16 +191,22 @@ def carregar_parquets(
     pattern: Optional[str] = None,
 ) -> Dict[str, pd.DataFrame]:
     """
-    Versão que NÃO injeta no escopo. Retorna um dict {nome_df: DataFrame}.
-    - nomes: lista sem '.parquet' (se None, carrega todos)
-    - pattern: glob simples (ex.: 'telemetria_*')
+    Versão que retorna dict {nome_df: DataFrame}.
+    Resolve arquivos mesmo estando em subpastas de 'prefix'.
     """
     s3 = get_s3()
 
     if nomes is None:
         keys = listar_parquets(bucket, prefix)
     else:
-        keys = [f"{prefix.rstrip('/')}/{n}.parquet" for n in nomes]
+        idx = _index_por_basename(bucket, prefix)
+        keys = []
+        for n in nomes:
+            base = n[:-8] if n.lower().endswith(".parquet") else n
+            if base in idx:
+                keys.extend(idx[base])
+            else:
+                keys.append(f"{prefix.rstrip('/')}/{n}.parquet")
 
     if not keys:
         print("Nenhum parquet encontrado.")

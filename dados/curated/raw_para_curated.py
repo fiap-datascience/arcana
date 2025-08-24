@@ -12,6 +12,33 @@ BUCKET = "arcana-fiap"
 PREFIXO_RAW = "bronze/"
 PREFIXO_CURATED = "silver/"
 
+# NOVO: mapeia arquivo -> nome da pasta/tabela no curated (Ajuste nomes se quiser)
+TABELA_POR_ARQUIVO = {
+    "nps_transacional_onboarding.csv": "tb_nps_onboarding",
+    "dados_clientes.csv": "tb_dados_clientes",
+    "historico.csv": "tb_historico",
+    "nps_transacional_implantacao.csv": "tb_nps_implantacao",
+    "nps_transacional_suporte.csv": "tb_nps_suporte",
+    "clientes_desde.csv": "tb_clientes_desde",
+    "mrr.csv": "tb_mrr",
+    "nps_relacional.csv": "tb_nps_relacional",
+    "nps_transacional_aquisicao.csv": "tb_nps_aquisicao",
+    "contratacoes_ultimos_12_meses.csv": "tb_contratacoes_12m",
+    "tickets.csv": "tb_tickets",
+    "nps_transacional_produto.csv": "tb_nps_produto",
+    "telemetria_1.csv": "tb_telemetria",
+    "telemetria_2.csv": "tb_telemetria",
+    "telemetria_3.csv": "tb_telemetria",
+    "telemetria_4.csv": "tb_telemetria",
+    "telemetria_5.csv": "tb_telemetria",
+    "telemetria_6.csv": "tb_telemetria",
+    "telemetria_7.csv": "tb_telemetria",
+    "telemetria_8.csv": "tb_telemetria",
+    "telemetria_9.csv": "tb_telemetria",
+    "telemetria_10.csv": "tb_telemetria",
+    "telemetria_11.csv": "tb_telemetria",
+}
+
 # Mapeamento de renomeação de colunas por tabela
 RENOMEACAO_COLUNAS = {
     "nps_transacional_onboarding.csv": {
@@ -248,7 +275,7 @@ CAMPOS_TABELAS = {
     },
     "dados_clientes.csv": {
         "colunas_data": ["DATA_ASSINATURA_CONTRATO"],
-        "colunas_numericas": []
+        "colunas_numericas": ["VL_TOTAL_CONTRATO"]
     },
     "contratacoes_ultimos_12_meses.csv": {
         "colunas_data": [],
@@ -260,7 +287,7 @@ CAMPOS_TABELAS = {
     },
     "historico.csv": {
         "colunas_data": ["DATA_UPLOAD"],
-        "colunas_numericas": []
+        "colunas_numericas": ["VL_PCT_DESC_TEMP", "VL_PCT_DESCONTO", "PRC_UNITARIO", "VL_DESCONTO_TEMPORARIO", "VL_TOTAL", "VL_FULL", "VL_DESCONTO"]
     },
     "nps_transacional_implantacao.csv": {
         "colunas_data": ["DATA_RESPOSTA"],
@@ -354,7 +381,7 @@ def valida_datas(df, colunas_data):
     """Valida colunas de data."""
     for col in colunas_data:
         if col in df.columns:
-            converte = pd.to_datetime(df[col], errors="coerce")
+            converte = pd.to_datetime(df[col], errors="coerce").dt.floor("D")
             valores_invalidos = converte.isna().sum()
             if valores_invalidos > 0:
                 print(f"Coluna '{col}' contém {valores_invalidos} valores inválidos para data.")
@@ -400,7 +427,7 @@ def detecta_separador(texto):
 
 
 def processa_csv_para_parquet(s3_key):
-    """Processa CSV: detecta encoding/sep, renomeia, valida e salva no curated."""
+    """Processa CSV: detecta encoding/sep, renomeia, valida e salva no curated em pastas por tabela (sem particionar)."""
     filename = s3_key.split("/")[-1]
     print(f"\nProcessando {filename}...")
 
@@ -440,12 +467,14 @@ def processa_csv_para_parquet(s3_key):
     df = valida_datas(df, rules.get("colunas_data", []))
     df = valida_numericos(df, rules.get("colunas_numericas", []))
     
-    # Salvar no formato Parquet
+    # Salvar no formato Parquet (sem particionar)
     parquet_buffer = BytesIO()
-    df.to_parquet(parquet_buffer, index=False)
+    df.to_parquet(parquet_buffer, index=False)  # pode adicionar compression="snappy" se desejar
     parquet_buffer.seek(0)
 
-    curated_key = f"{PREFIXO_CURATED}{filename.replace('.csv', '.parquet')}"
+    # NOVO: define pasta da tabela no curated a partir do nome do arquivo
+    tabela = TABELA_POR_ARQUIVO.get(filename, filename.replace(".csv",""))
+    curated_key = f"{PREFIXO_CURATED}{tabela}/{filename.replace('.csv', '.parquet')}"
     s3.put_object(Bucket=BUCKET, Key=curated_key, Body=parquet_buffer.getvalue())
 
     print(f"Arquivo salvo na camada curated: {curated_key}")
