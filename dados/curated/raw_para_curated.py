@@ -394,12 +394,11 @@ def valida_numericos(df, colunas_numericas):
         if col in df.columns:
             valores = df[col].astype(str).str.strip()
 
-            # Se houver vírgula em uma fração relevante das linhas, assumimos padrão BR
             if (valores.str.contains(",", na=False).mean() > 0.05):
                 valores = valores.str.replace(".", "", regex=False)  # remove milhar
                 valores = valores.str.replace(",", ".", regex=False) # vírgula -> ponto
 
-            # remove símbolos não numéricos residuais (R$, espaços, etc.)
+            # remove símbolos não numéricos (R$, espaços, etc.)
             valores = valores.str.replace(r"[^\d\.\-]", "", regex=True)
 
             converte = pd.to_numeric(valores, errors="coerce")
@@ -467,9 +466,9 @@ def processa_csv_para_parquet(s3_key):
     df = valida_datas(df, rules.get("colunas_data", []))
     df = valida_numericos(df, rules.get("colunas_numericas", []))
     
-    # Salvar no formato Parquet (sem particionar)
+    # Salvar no formato Parquet 
     parquet_buffer = BytesIO()
-    df.to_parquet(parquet_buffer, index=False)  # pode adicionar compression="snappy" se desejar
+    df.to_parquet(parquet_buffer, index=False) 
     parquet_buffer.seek(0)
 
     # NOVO: define pasta da tabela no curated a partir do nome do arquivo
