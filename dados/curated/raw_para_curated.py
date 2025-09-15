@@ -1,3 +1,7 @@
+# ==============================================================================
+# 📦 Importação de Bibliotecas
+# ==============================================================================
+
 import boto3
 import pandas as pd
 from io import BytesIO, StringIO
@@ -12,7 +16,10 @@ BUCKET = "arcana-fiap"
 PREFIXO_RAW = "bronze/"
 PREFIXO_CURATED = "silver/"
 
-# NOVO: mapeia arquivo -> nome da pasta/tabela no curated (Ajuste nomes se quiser)
+# ==============================================================================
+# 🔹 Mapeamento do arquivo para renomear colunas e validar tipo de colunas
+# ==============================================================================
+
 TABELA_POR_ARQUIVO = {
     "nps_transacional_onboarding.csv": "tb_nps_onboarding",
     "dados_clientes.csv": "tb_dados_clientes",
@@ -358,6 +365,10 @@ CAMPOS_TABELAS = {
         "colunas_numericas": ["DURACAO_EVENTO"]
     }
 }
+
+# ==============================================================================
+# 🔹 Conexao com a AWS e leitura de arquivos
+# ==============================================================================
 
 # Conexão S3
 access_key_id = os.getenv("AWS_ACCESS_KEY_ID")

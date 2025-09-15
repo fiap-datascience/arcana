@@ -1,3 +1,7 @@
+# ==============================================================================
+# 📦 Importação de Bibliotecas
+# ==============================================================================
+
 import boto3
 import pandas as pd
 import numpy as np
@@ -10,7 +14,7 @@ load_dotenv()
 warnings.filterwarnings("ignore")
 
 
-# Função para detectar o separador do CSV, asumi-se que o separador mais frequente na primeira linha é o correto
+# Função para detectar o separador do CSV
 def detectar_separador(conteudo_decodificado):
     primeira_linha = conteudo_decodificado.splitlines()[0]
     if primeira_linha.count(';') > primeira_linha.count(','):
