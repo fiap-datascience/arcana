@@ -6,6 +6,11 @@ O **Arcana** é um projeto de análise e **clusterização de clientes da TOTVS*
 
 O projeto abrangeu desde a ingestão e organização dos dados em camadas até a aplicação de **modelos de clusterização baseados em Gaussian Mixture Models Bayesianos (BGMM)**, resultando na criação de **8 personas de clientes** que apoiam estratégias de personalização e relacionamento.  
 
+## 🎥 Apresentação do Projeto
+
+Assista ao nosso pitch de 5 minutos apresentando a solução, as personas e os resultados estratégicos do projeto.
+
+**[➡️ Assistir no YouTube](https://youtu.be/0qXo-tKPgJo?si=TgG4ZV8exU83Szij)**
 
 ## 🎯 Objetivos  
 
